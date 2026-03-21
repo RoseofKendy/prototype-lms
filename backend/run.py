@@ -1,6 +1,7 @@
 from src.app import create_app
 from src.config.db import db
 from src.modules.users.model import User
+from src.modules.courses.model import Course
 
 app = create_app()
 
