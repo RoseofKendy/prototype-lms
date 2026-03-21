@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 from src.config.db import db
+from src.modules.auth.routes import auth_bp
 
 def create_app():
     app = Flask(__name__)
@@ -10,6 +11,8 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
+    
+    app.register_blueprint(auth_bp, url_prefix="/api/auth")
 
     @app.route("/")
     def home():
