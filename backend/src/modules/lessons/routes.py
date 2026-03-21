@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from src.config.mongo import lessons_collection
 from src.middleware.auth_middleware import token_required
 from src.modules.users.model import User
+import uuid
 
 lessons_bp = Blueprint("lessons", __name__)
 
@@ -19,6 +20,7 @@ def add_lesson():
     data = request.get_json()
 
     lesson = {
+        "lesson_id": str(uuid.uuid4()),
         "course_id": data.get("course_id"),
         "title": data.get("title"),
         "type": data.get("type"),  # text or video

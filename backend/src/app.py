@@ -4,6 +4,7 @@ from src.config.db import db
 from src.modules.auth.routes import auth_bp
 from src.modules.courses.routes import courses_bp
 from src.modules.lessons.routes import lessons_bp
+from src.modules.progress.routes import progress_bp
 
 def create_app():
     app = Flask(__name__)
@@ -17,6 +18,7 @@ def create_app():
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
     app.register_blueprint(courses_bp, url_prefix="/api/courses")
     app.register_blueprint(lessons_bp, url_prefix="/api/lessons")
+    app.register_blueprint(progress_bp, url_prefix="/api/progress")
 
     @app.route("/")
     def home():
