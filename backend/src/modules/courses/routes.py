@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from src.config.db import db
+from src.modules.users.model import User
 from src.modules.courses.model import Course
 from src.middleware.auth_middleware import token_required
 
@@ -9,6 +10,10 @@ courses_bp = Blueprint("courses", __name__)
 @courses_bp.route("/", methods=["POST"])
 @token_required
 def create_course():
+    user = User.query.get(request.user["user_id"])
+    if user.role != "admin":
+        return jsonify({"error": "Unauthorized"}), 403
+    
     data = request.get_json()
 
     course = Course(
