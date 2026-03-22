@@ -11,20 +11,36 @@ function Login() {
     try {
       const res = await API.post("/auth/login", { email, password });
 
+      // ✅ Store token + role
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("role", res.data.role);
+
+      // ✅ Set token globally
       setAuthToken(res.data.token);
 
       navigate("/");
     } catch (err) {
-      alert("Login failed");
+      alert(err.response?.data?.error || "Login failed");
     }
   };
 
   return (
-    <div>
+    <div style={{ padding: "20px" }}>
       <h2>Login</h2>
-      <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-      <input placeholder="Password" type="password" onChange={(e) => setPassword(e.target.value)} />
+
+      <input
+        placeholder="Email"
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <br /><br />
+
+      <input
+        placeholder="Password"
+        type="password"
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <br /><br />
+
       <button onClick={handleLogin}>Login</button>
     </div>
   );

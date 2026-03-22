@@ -8,20 +8,37 @@ function Register() {
   const navigate = useNavigate();
 
   const handleRegister = async () => {
-    await API.post("/auth/register", {
-      email,
-      password,
-      role: "learner"
-    });
+    try {
+      await API.post("/auth/register", {
+        email,
+        password,
+        role: "learner"
+      });
 
-    navigate("/login");
+      alert("Registration successful!");
+      navigate("/login");
+    } catch (err) {
+      alert(err.response?.data?.error || "Registration failed");
+    }
   };
 
   return (
-    <div>
+    <div style={{ padding: "20px" }}>
       <h2>Register</h2>
-      <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-      <input placeholder="Password" type="password" onChange={(e) => setPassword(e.target.value)} />
+
+      <input
+        placeholder="Email"
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <br /><br />
+
+      <input
+        placeholder="Password"
+        type="password"
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <br /><br />
+
       <button onClick={handleRegister}>Register</button>
     </div>
   );
