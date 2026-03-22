@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_cors import cross_origin
 from src.config.mongo import lessons_collection
 from src.middleware.auth_middleware import token_required
 from src.modules.users.model import User
@@ -7,10 +8,17 @@ from src.modules.audit.utils import log_action
 
 lessons_bp = Blueprint("lessons", __name__)
 
-@lessons_bp.route("/", methods=["POST"])
+
+# --------------------------
+# ADD LESSON (ADMIN ONLY)
+# --------------------------
+@lessons_bp.route("/", methods=["POST", "OPTIONS"])
+@cross_origin()
 @token_required
 def add_lesson():
-    from flask import request
+    # ✅ Allow preflight
+    if request.method == "OPTIONS":
+        return "", 200
 
     user_id = request.user["user_id"]
     user = User.query.get(user_id)
@@ -29,14 +37,25 @@ def add_lesson():
     }
 
     lessons_collection.insert_one(lesson)
-    
+
     log_action(user_id, "ADD_LESSON")
 
     return jsonify({"message": "Lesson added"}), 201
 
 
-@lessons_bp.route("/<course_id>", methods=["GET"])
+# --------------------------
+# GET LESSONS FOR A COURSE
+# --------------------------
+@lessons_bp.route("/<course_id>", methods=["GET", "OPTIONS"])
+@cross_origin()
 def get_lessons(course_id):
-    lessons = list(lessons_collection.find({"course_id": int(course_id)}, {"_id": 0}))
+    # ✅ Allow preflight
+    if request.method == "OPTIONS":
+        return "", 200
 
-    return jsonify(lessons)
+    lessons = list(lessons_collection.find(
+        {"course_id": int(course_id)},
+        {"_id": 0}
+    ))
+
+    return jsonify(lessons), 200

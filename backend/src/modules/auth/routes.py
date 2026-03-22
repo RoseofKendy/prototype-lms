@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_cors import cross_origin
 from src.config.db import db
 from src.modules.users.model import User
 import bcrypt
@@ -6,13 +7,20 @@ import jwt
 import datetime
 
 auth_bp = Blueprint("auth", __name__)
-
 SECRET_KEY = "supersecretkey"
 
-@auth_bp.route("/register", methods=["POST"])
-def register():
-    data = request.get_json()
 
+# --------------------------
+# REGISTER
+# --------------------------
+@auth_bp.route("/register", methods=["POST", "OPTIONS"])
+@cross_origin()
+def register():
+    # ✅ Allow preflight
+    if request.method == "OPTIONS":
+        return "", 200
+
+    data = request.get_json()
     email = data.get("email")
     password = data.get("password")
     role = data.get("role", "learner")
@@ -22,7 +30,6 @@ def register():
         return jsonify({"error": "Email already exists"}), 400
 
     hashed_pw = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-
     user = User(email=email, password=hashed_pw.decode('utf-8'), role=role)
 
     db.session.add(user)
@@ -31,16 +38,20 @@ def register():
     return jsonify({"message": "User registered successfully"}), 201
 
 
-@auth_bp.route("/login", methods=["POST"])
+# --------------------------
+# LOGIN
+# --------------------------
+@auth_bp.route("/login", methods=["POST", "OPTIONS"])
+@cross_origin()
 def login():
-    data = request.get_json()
+    # ✅ Allow preflight
+    if request.method == "OPTIONS":
+        return "", 200
 
+    data = request.get_json()
     user = User.query.filter_by(email=data.get("email")).first()
 
-    if not user:
-        return jsonify({"error": "Invalid credentials"}), 401
-
-    if not bcrypt.checkpw(data.get("password").encode('utf-8'), user.password.encode('utf-8')):
+    if not user or not bcrypt.checkpw(data.get("password").encode('utf-8'), user.password.encode('utf-8')):
         return jsonify({"error": "Invalid credentials"}), 401
 
     token = jwt.encode({
@@ -48,4 +59,4 @@ def login():
         "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=2)
     }, SECRET_KEY, algorithm="HS256")
 
-    return jsonify({"token": token, "role": user.role})
+    return jsonify({"token": token, "role": user.role}), 200

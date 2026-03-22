@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_cors import cross_origin
 from src.config.db import db
 from src.modules.users.model import User
 from src.modules.courses.model import Course
@@ -7,14 +8,22 @@ from src.modules.audit.utils import log_action
 
 courses_bp = Blueprint("courses", __name__)
 
-# Create course (Admin only)
-@courses_bp.route("/", methods=["POST"])
+
+# --------------------------
+# CREATE COURSE (ADMIN ONLY)
+# --------------------------
+@courses_bp.route("/", methods=["POST", "OPTIONS"])
+@cross_origin()
 @token_required
 def create_course():
+    # ✅ Allow preflight
+    if request.method == "OPTIONS":
+        return "", 200
+
     user = User.query.get(request.user["user_id"])
     if user.role != "admin":
         return jsonify({"error": "Unauthorized"}), 403
-    
+
     data = request.get_json()
 
     course = Course(
@@ -26,15 +35,22 @@ def create_course():
 
     db.session.add(course)
     db.session.commit()
-    
+
     log_action(request.user["user_id"], "CREATE_COURSE")
 
     return jsonify({"message": "Course created"}), 201
 
 
-# Get all courses
-@courses_bp.route("/", methods=["GET"])
+# --------------------------
+# GET ALL COURSES
+# --------------------------
+@courses_bp.route("/", methods=["GET", "OPTIONS"])
+@cross_origin()
 def get_courses():
+    # ✅ Allow preflight
+    if request.method == "OPTIONS":
+        return "", 200
+
     courses = Course.query.all()
 
     result = []
@@ -46,4 +62,4 @@ def get_courses():
             "category": c.category
         })
 
-    return jsonify(result)
+    return jsonify(result), 200
