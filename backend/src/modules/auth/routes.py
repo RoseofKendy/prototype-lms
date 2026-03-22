@@ -17,6 +17,10 @@ def register():
     password = data.get("password")
     role = data.get("role", "learner")
 
+    existing_user = User.query.filter_by(email=email).first()
+    if existing_user:
+        return jsonify({"error": "Email already exists"}), 400
+
     hashed_pw = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
     user = User(email=email, password=hashed_pw.decode('utf-8'), role=role)
