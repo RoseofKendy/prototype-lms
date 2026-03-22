@@ -15,7 +15,7 @@ function Admin({ showNotification }) {
     setLoading(true);
     try {
       await API.post(
-        "/",
+        "/courses",
         { title, description, category },
         { headers: { Authorization: `Bearer ${token}` } }
       );
