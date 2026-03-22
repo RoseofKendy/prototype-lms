@@ -8,15 +8,10 @@ from src.modules.audit.utils import log_action
 
 courses_bp = Blueprint("courses", __name__)
 
-
-# --------------------------
-# CREATE COURSE (ADMIN ONLY)
-# --------------------------
 @courses_bp.route("/", methods=["POST", "OPTIONS"])
 @cross_origin()
 @token_required
 def create_course():
-    # ✅ Allow preflight
     if request.method == "OPTIONS":
         return "", 200
 
