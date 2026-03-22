@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from src.config.mongo import progress_collection, lessons_collection
 from src.middleware.auth_middleware import token_required
+from src.modules.audit.utils import log_action
 
 progress_bp = Blueprint("progress", __name__)
 
@@ -32,6 +33,8 @@ def complete_lesson():
             "course_id": course_id,
             "completed_lessons": [lesson_id]
         })
+        
+    log_action(user_id, "COMPLETE_LESSON")
 
     return jsonify({"message": "Lesson marked as completed"})
 

@@ -5,3 +5,4 @@ db = client["lms_db"]
 
 lessons_collection = db["lessons"]
 progress_collection = db["progress"]
+audit_logs_collection = db["audit_logs"]

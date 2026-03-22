@@ -3,6 +3,7 @@ from src.config.db import db
 from src.modules.users.model import User
 from src.modules.courses.model import Course
 from src.middleware.auth_middleware import token_required
+from src.modules.audit.utils import log_action
 
 courses_bp = Blueprint("courses", __name__)
 
@@ -25,6 +26,8 @@ def create_course():
 
     db.session.add(course)
     db.session.commit()
+    
+    log_action(request.user["user_id"], "CREATE_COURSE")
 
     return jsonify({"message": "Course created"}), 201
 

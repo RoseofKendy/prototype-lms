@@ -2,6 +2,7 @@ from src.app import create_app
 from src.config.db import db
 from src.modules.users.model import User
 from src.modules.courses.model import Course
+from src.modules.audit.model import AuditLog
 
 app = create_app()
 

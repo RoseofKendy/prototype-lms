@@ -3,6 +3,7 @@ from src.config.mongo import lessons_collection
 from src.middleware.auth_middleware import token_required
 from src.modules.users.model import User
 import uuid
+from src.modules.audit.utils import log_action
 
 lessons_bp = Blueprint("lessons", __name__)
 
@@ -28,6 +29,8 @@ def add_lesson():
     }
 
     lessons_collection.insert_one(lesson)
+    
+    log_action(user_id, "ADD_LESSON")
 
     return jsonify({"message": "Lesson added"}), 201
 
