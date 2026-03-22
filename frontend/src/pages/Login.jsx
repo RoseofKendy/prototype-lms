@@ -33,8 +33,25 @@ function Login({ showNotification }) {
     <div className="container form">
       <h2>Login</h2>
 
-      <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-      <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+<input
+  id="email"
+  name="email"
+  type="email"
+  placeholder="Email"
+  autoComplete="email"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+/>
+
+<input
+  id="password"
+  name="password"
+  type="password"
+  placeholder="Password"
+  autoComplete="current-password"
+  value={password}
+  onChange={(e) => setPassword(e.target.value)}
+/>
 
       <button onClick={handleLogin} disabled={loading}>
         {loading ? "Logging in..." : "Login"}
