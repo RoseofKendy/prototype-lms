@@ -44,4 +44,4 @@ def login():
         "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=2)
     }, SECRET_KEY, algorithm="HS256")
 
-    return jsonify({"token": token})
+    return jsonify({"token": token, "role": user.role})
