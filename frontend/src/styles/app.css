@@ -1,0 +1,88 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f7fb;
+  margin: 0;
+}
+
+/* Layout */
+.container {
+  padding: 20px;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  gap: 15px;
+  padding: 15px;
+  background: linear-gradient(to right, #4f46e5, #7c3aed);
+  color: white;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+}
+
+/* Cards */
+.card {
+  background: white;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Form */
+.form {
+  max-width: 400px;
+  margin: auto;
+}
+
+input {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+}
+
+/* Buttons */
+button {
+  background: linear-gradient(to right, #4f46e5, #7c3aed);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Notification */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px;
+  color: white;
+  border-radius: 6px;
+}
+
+.notification.success { background: green; }
+.notification.error { background: red; }
+
+/* Spinner */
+.spinner-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.spinner {
+  width: 30px;
+  height: 30px;
+  border: 4px solid #7c3aed;
+  border-top: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
