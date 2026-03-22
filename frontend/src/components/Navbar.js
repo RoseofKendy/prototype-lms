@@ -9,20 +9,17 @@ function Navbar() {
   };
 
   return (
-    <nav style={{
-      padding: "10px",
-      borderBottom: "1px solid #ccc",
-      marginBottom: "20px"
-    }}>
-      <Link to="/" style={{ marginRight: "10px" }}>Courses</Link>
-
-      {role === "admin" && (
-        <Link to="/admin" style={{ marginRight: "10px" }}>
-          Admin
-        </Link>
-      )}
-
-      <button onClick={handleLogout}>
+    <nav className="bg-gray-100 shadow-md sticky top-0 z-50 p-4 flex justify-between items-center">
+      <div className="flex space-x-4">
+        <Link className="text-gray-700 font-medium hover:text-blue-600" to="/">Courses</Link>
+        {role === "admin" && (
+          <Link className="text-gray-700 font-medium hover:text-blue-600" to="/admin">Admin</Link>
+        )}
+      </div>
+      <button
+        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition-colors"
+        onClick={handleLogout}
+      >
         Logout
       </button>
     </nav>

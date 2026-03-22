@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 function Courses() {
   const [courses, setCourses] = useState([]);
-
   const role = localStorage.getItem("role");
 
   useEffect(() => {
@@ -14,31 +13,37 @@ function Courses() {
   }, []);
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Courses</h2>
+    <div>
+      <h2 className="text-3xl font-bold mb-6 text-center">Courses</h2>
 
-      {/* ✅ Admin-only action */}
       {role === "admin" && (
-        <button style={{ marginBottom: "20px" }}>
-          Create Course
-        </button>
+        <div className="flex justify-end mb-4">
+          <Link
+            to="/admin"
+            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+          >
+            Admin Panel
+          </Link>
+        </div>
       )}
 
-      {courses.map((c) => (
-        <div
-          key={c.id}
-          style={{
-            border: "1px solid #ccc",
-            padding: "15px",
-            marginBottom: "10px",
-            borderRadius: "8px"
-          }}
-        >
-          <h3>{c.title}</h3>
-          <p>{c.description}</p>
-          <Link to={`/courses/${c.id}`}>View</Link>
-        </div>
-      ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {courses.map((c) => (
+          <div
+            key={c.id}
+            className="border rounded-lg p-6 shadow hover:shadow-lg transition-shadow"
+          >
+            <h3 className="text-xl font-semibold mb-2">{c.title}</h3>
+            <p className="text-gray-600 mb-4">{c.description}</p>
+            <Link
+              className="text-blue-600 hover:underline font-medium"
+              to={`/courses/${c.id}`}
+            >
+              View Course
+            </Link>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
