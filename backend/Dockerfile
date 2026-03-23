@@ -8,4 +8,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["python", "run.py"]
+CMD ["./wait-for-it.sh", "postgres:5432", "--", "python", "run.py"]
